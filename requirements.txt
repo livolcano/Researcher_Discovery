@@ -1,0 +1,9 @@
+requests
+pandas
+openpyxl
+pyyaml
+python-dotenv
+feedparser
+pytest
+truststore
+pycountry

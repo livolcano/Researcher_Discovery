@@ -1,0 +1,22 @@
+topic_name: "Wireless ISAC Researcher Discovery"
+
+queries:
+  - id: Q01
+    text: '"Integrated Sensing and Communication"'
+    topic_cluster: "ISAC"
+
+  - id: Q02
+    text: '"Joint Communication and Sensing"'
+    topic_cluster: "JCAS"
+
+  - id: Q03
+    text: '"6G" AND "ISAC"'
+    topic_cluster: "6G ISAC"
+
+  - id: Q04
+    text: '"JCAS" OR "JC&S" '
+    topic_cluster: "JCAS"
+
+  - id: Q05
+    text: '"Wireless Communications" AND "RADAR"'
+    topic_cluster: "RADAR in Wireless Communications"

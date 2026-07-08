@@ -1,0 +1,46 @@
+topic_name: "Wireless Power Monitoring Researcher Discovery"
+
+queries:
+  - id: Q01
+    text: '"6G" AND "energy efficiency"'
+    topic_cluster: "6G Energy Efficiency"
+
+  - id: Q02
+    text: '"6G" AND "power efficiency"'
+    topic_cluster: "6G Power Efficiency"
+
+  - id: Q03
+    text: '"6G" AND "sustainability"'
+    topic_cluster: "6G Sustainability"
+
+  - id: Q04
+    text: '"green 6G"'
+    topic_cluster: "Green 6G"
+
+  - id: Q05
+    text: '"sustainable 6G"'
+    topic_cluster: "Sustainable 6G"
+
+  - id: Q06
+    text: '"AI-RAN" AND "energy efficiency"'
+    topic_cluster: "AI-RAN Energy Efficiency"
+
+  - id: Q07
+    text: '"wireless communications" AND "power monitoring"'
+    topic_cluster: "Wireless Power Monitoring"
+
+  - id: Q08
+    text: '"wireless communication" AND "energy"'
+    topic_cluster: "Wireless Energy"
+
+  - id: Q09
+    text: '"mobile communications" AND "cost"'
+    topic_cluster: "Mobile Communications Cost"
+
+  - id: Q10
+    text: '"Telecom" AND "net zero"'
+    topic_cluster: "Telecom Net Zero"
+      
+  - id: Q11
+    text: '"AI-RAN" AND "power consumption"'
+    topic_cluster: "AI-RAN Power Consumption"

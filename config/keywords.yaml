@@ -1,0 +1,55 @@
+topic_name: "6G"
+
+queries:
+
+  - id: Q01
+    text: '("6G" OR "B5G" OR "Beyond 5G") AND ("wireless communication" OR "mobile communications")'
+    topic_cluster: "6G Foundation"
+
+  - id: Q02
+    text: '"V2X" OR "vehicle-to-everything" OR "C-V2X"'
+    topic_cluster: "V2X"
+
+  - id: Q03
+    text: '"ISAC" OR "integrated sensing and communication"'
+    topic_cluster: "ISAC"
+
+  - id: Q04
+    text: '"RIS" OR "reconfigurable intelligent surface" OR "intelligent reflecting surface"'
+    topic_cluster: "RIS"
+
+  - id: Q05
+    text: '"NTN" OR "non-terrestrial network" OR "satellite communications"'
+    topic_cluster: "NTN"
+
+  - id: Q06
+    text: '("6G" OR "B5G") AND ("AI-native" OR "machine learning" OR "deep learning")'
+    topic_cluster: "6G AI-Native"
+
+  - id: Q07
+    text: '"semantic communication" OR "goal-oriented communication"'
+    topic_cluster: "Semantic Communication"
+
+  - id: Q08
+    text: '"cell-free massive MIMO" OR "ultra-massive MIMO" OR "massive MIMO"'
+    topic_cluster: "MIMO"
+
+  - id: Q09
+    text: '("6G" OR "Beyond 5G") AND ("digital twin" OR "network digital twin")'
+    topic_cluster: "6G Digital Twin"
+
+  - id: Q10
+    text: '"Open RAN" OR "O-RAN" OR "open radio access network"'
+    topic_cluster: "Open RAN"
+
+  - id: Q11
+    text: '"green communications" OR "energy efficiency" OR "sustainable wireless"'
+    topic_cluster: "Green Networking"
+
+  - id: Q12
+    text: '("6G" OR "B5G") AND ("physical layer security" OR "secure communications" OR "zero trust")'
+    topic_cluster: "6G Security"
+
+  - id: Q13
+    text: '("wireless") AND ("mmWave" OR "millimeter wave" OR "FR2" OR "FR3")'
+    topic_cluster: "6G mmWave and Spectrum"

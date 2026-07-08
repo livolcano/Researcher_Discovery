@@ -1,0 +1,39 @@
+sources:
+  openalex:
+    enabled: true
+    max_results_per_query: 200
+    page_size: 200
+    max_pages: 20
+    from_publication_year: 2023
+
+  arxiv:
+    enabled: true
+    max_results_per_query: 200
+    page_size: 100
+    max_pages: 20
+    from_publication_year: 2023
+    request_interval_seconds: 3.0
+    retry_on_429: 1
+    retry_backoff_seconds: 6.0
+
+  ieee:
+    enabled: false
+    max_results_per_query: 200
+    from_publication_year: 2023
+
+output:
+  excel_file: "data/researcher_discovery_output/researcher_discovery_mvp.xlsx"
+
+geographic_filter:
+  country_or_region: "Japan"
+  continent: "APAC"
+
+deduplication:
+  prefer_orcid: true
+  prefer_source_author_id: true
+  fallback_name_institution: true
+
+scoring:
+  recent_year_threshold: 2023
+  high_relevance_min_score: 8
+  medium_relevance_min_score: 6
