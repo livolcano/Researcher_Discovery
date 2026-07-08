@@ -3,11 +3,12 @@ from __future__ import annotations
 import logging
 import time
 from datetime import datetime
+from typing import Optional
 
 import feedparser
 import requests
 
-from src.utils.logging_utils import build_source_log_entry
+from src.utils.logging_utils import build_source_log_entry, sanitize_sensitive_text
 
 
 ARXIV_QUERY_URL = "https://export.arxiv.org/api/query"
@@ -71,7 +72,7 @@ def _entry_to_dict(entry: dict) -> dict:
 	}
 
 
-def _passes_year_filter(record: dict, from_publication_year: int | None) -> bool:
+def _passes_year_filter(record: dict, from_publication_year: Optional[int]) -> bool:
 	if not from_publication_year:
 		return True
 
@@ -164,10 +165,11 @@ def search_papers(query_config: dict, settings: dict, logger: logging.Logger) ->
 			returned_record_count=len(records),
 		)
 	except requests.RequestException as exc:
-		logger.error("arXiv query failed for %s: %s", query_config.get("id"), exc)
+		sanitized_error = sanitize_sensitive_text(exc)
+		logger.error("arXiv query failed for %s: %s", query_config.get("id"), sanitized_error)
 		return [], build_source_log_entry(
 			source_system="arxiv",
 			query_config=query_config,
 			status="error",
-			error_message=str(exc),
+			error_message=sanitized_error,
 		)

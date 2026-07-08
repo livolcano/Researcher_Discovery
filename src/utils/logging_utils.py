@@ -1,8 +1,16 @@
 from __future__ import annotations
 
 import logging
+import re
 from datetime import datetime, timezone
 from pathlib import Path
+from typing import Optional
+
+
+_SENSITIVE_PATTERNS = (
+	(re.compile(r"([?&](?:api[_-]?key|apikey|access[_-]?token|token|client[_-]?secret)=)([^&\s]+)", re.IGNORECASE), r"\1[REDACTED]"),
+	(re.compile(r"\b((?:OPENALEX|IEEE|API|ACCESS|CLIENT|AUTH|BEARER|GITHUB)[A-Z0-9_]*?(?:KEY|TOKEN|SECRET))=([^\s]+)", re.IGNORECASE), r"\1=[REDACTED]"),
+)
 
 
 def setup_logging(log_dir: Path) -> logging.Logger:
@@ -27,13 +35,20 @@ def setup_logging(log_dir: Path) -> logging.Logger:
 	return logger
 
 
+def sanitize_sensitive_text(value: object) -> str:
+	text = str(value)
+	for pattern, replacement in _SENSITIVE_PATTERNS:
+		text = pattern.sub(replacement, text)
+	return text
+
+
 def build_source_log_entry(
 	*,
 	source_system: str,
 	query_config: dict,
 	status: str,
 	returned_record_count: int = 0,
-	error_message: str | None = None,
+	error_message: Optional[str] = None,
 ) -> dict:
 	return {
 		"timestamp_utc": datetime.now(timezone.utc).isoformat(timespec="seconds"),
@@ -43,5 +58,5 @@ def build_source_log_entry(
 		"topic_cluster": query_config.get("topic_cluster"),
 		"status": status,
 		"returned_record_count": returned_record_count,
-		"error_message": error_message,
+		"error_message": sanitize_sensitive_text(error_message) if error_message else None,
 	}

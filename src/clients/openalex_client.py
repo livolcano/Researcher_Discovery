@@ -1,10 +1,11 @@
 from __future__ import annotations
 
 import logging
+from typing import Optional
 
 import requests
 
-from src.utils.logging_utils import build_source_log_entry
+from src.utils.logging_utils import build_source_log_entry, sanitize_sensitive_text
 
 
 OPENALEX_WORKS_URL = "https://api.openalex.org/works"
@@ -28,8 +29,8 @@ def search_papers(
 	query_config: dict,
 	settings: dict,
 	logger: logging.Logger,
-	api_key: str | None = None,
-	contact_email: str | None = None,
+	api_key: Optional[str] = None,
+	contact_email: Optional[str] = None,
 ) -> tuple[list[dict], dict]:
 	target_results = _to_positive_int(settings.get("max_results_per_query", 50), 50)
 	page_size = _to_positive_int(settings.get("page_size", min(target_results, OPENALEX_MAX_PER_PAGE)), min(target_results, OPENALEX_MAX_PER_PAGE))
@@ -75,10 +76,11 @@ def search_papers(
 			returned_record_count=len(records),
 		)
 	except requests.RequestException as exc:
-		logger.error("OpenAlex query failed for %s: %s", query_config.get("id"), exc)
+		sanitized_error = sanitize_sensitive_text(exc)
+		logger.error("OpenAlex query failed for %s: %s", query_config.get("id"), sanitized_error)
 		return [], build_source_log_entry(
 			source_system="openalex",
 			query_config=query_config,
 			status="error",
-			error_message=str(exc),
+			error_message=sanitized_error,
 		)

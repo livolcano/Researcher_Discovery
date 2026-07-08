@@ -1,8 +1,16 @@
 .env
 .venv/
+.venv-mac/
+.venv-mac-build/
+.venv-win-build/
 __pycache__/
 .pytest_cache/
 .DS_Store
+build/
+dist/
+*.pyc
 
 data/raw/
+data/interim/*.json
+data/researcher_discovery_output/*.xlsx
 data/researcher_discovery_output/logs/

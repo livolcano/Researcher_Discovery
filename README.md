@@ -259,6 +259,86 @@ python -m src.main
 
 如果终端没有报错，但数字全是 0，优先检查：
 
+## 10. 简易 UI
+
+如果你不想改 YAML，可以直接用一个极简页面输入关键词和地理范围。
+
+先安装依赖：
+
+```powershell
+pip install -r requirements.txt
+```
+
+启动页面：
+
+```powershell
+streamlit run ui_app.py
+```
+
+页面里只保留 4 个必要输入：
+
+- `关键词`：每行一个关键词或检索语句。
+- `国家`：可选，例如 `Japan`。
+- `Continent`：可选，只支持 `APAC`、`EMEA`、`AMER`。
+- `开始搜索`：执行搜索并生成结果。
+
+运行后页面会显示：
+
+- query 数量
+- paper 数量
+- author relation 数量
+- researcher candidate 数量
+- 候选人简表
+- Excel 下载按钮
+
+## 11. Desktop App Packaging
+
+如果你想把这个项目做成可直接点击运行的桌面应用，而不是手动执行 `streamlit run`，项目里已经补了桌面启动器和打包脚本。
+
+相关文件：
+
+- `desktop_launcher.py`：桌面入口。双击后的本地应用会从这里启动。
+- `ResearcherDiscovery.spec`：macOS 打包配置。
+- `build_mac_app.sh`：macOS 构建脚本。
+- `build_windows_exe.ps1`：Windows `exe` 构建脚本。
+- `requirements-desktop.txt`：桌面打包额外依赖。
+
+### 11.1 macOS
+
+在项目根目录执行：
+
+```bash
+chmod +x build_mac_app.sh
+./build_mac_app.sh
+```
+
+构建完成后，产物会在：
+
+```text
+dist/ResearcherDiscovery.app
+```
+
+### 11.2 Windows
+
+在 PowerShell 中执行：
+
+```powershell
+.\build_windows_exe.ps1
+```
+
+构建完成后，产物会在：
+
+```text
+dist\ResearcherDiscovery\
+```
+
+说明：
+
+- Windows `exe` 需要在 Windows 环境下构建，不能在 macOS 上直接产出原生 Windows `exe`。
+- macOS `.app` 需要在 macOS 环境下构建。
+- 如果是首次打开 macOS `.app`，系统可能会提示来源未验证，需要在系统设置里允许打开，或使用右键 `Open`。
+- 本地文件夹选择功能适用于桌面本地运行，不适用于部署到公网域名后的浏览器访问场景。
+
 - 关键词是否太窄。
 - 网络是否可访问目标站点。
 - `from_publication_year` 是否过新。

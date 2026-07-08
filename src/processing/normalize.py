@@ -1,18 +1,19 @@
 from __future__ import annotations
 
 from datetime import datetime
+from typing import Optional
 
 import pycountry
 
 
-def _clean_text(value: object) -> str | None:
+def _clean_text(value: object) -> Optional[str]:
 	if isinstance(value, str):
 		cleaned = " ".join(value.strip().split())
 		return cleaned or None
 	return None
 
 
-def _normalize_doi(value: str | None) -> str | None:
+def _normalize_doi(value: Optional[str]) -> Optional[str]:
 	if not value:
 		return None
 
@@ -22,7 +23,7 @@ def _normalize_doi(value: str | None) -> str | None:
 	return cleaned or None
 
 
-def _normalize_orcid(value: str | None) -> str | None:
+def _normalize_orcid(value: Optional[str]) -> Optional[str]:
 	if not value:
 		return None
 
@@ -32,7 +33,7 @@ def _normalize_orcid(value: str | None) -> str | None:
 	return cleaned or None
 
 
-def _reconstruct_openalex_abstract(abstract_inverted_index: dict | None) -> str | None:
+def _reconstruct_openalex_abstract(abstract_inverted_index: Optional[dict]) -> Optional[str]:
 	if not abstract_inverted_index:
 		return None
 
@@ -70,7 +71,7 @@ def _openalex_topic_terms(record: dict) -> list[str]:
 	return unique_terms
 
 
-def _openalex_venue(record: dict) -> str | None:
+def _openalex_venue(record: dict) -> Optional[str]:
 	primary_location = record.get("primary_location") or {}
 	source = primary_location.get("source") or {}
 	return source.get("display_name") or None
@@ -86,7 +87,7 @@ def _author_position(index: int, total: int) -> str:
 	return "middle"
 
 
-def _coerce_int(value: object) -> int | None:
+def _coerce_int(value: object) -> Optional[int]:
 	if isinstance(value, bool):
 		return None
 	if isinstance(value, int):
@@ -98,7 +99,7 @@ def _coerce_int(value: object) -> int | None:
 	return None
 
 
-def _first_non_empty(record: dict, keys: tuple[str, ...]) -> str | None:
+def _first_non_empty(record: dict, keys: tuple[str, ...]) -> Optional[str]:
 	for key in keys:
 		value = record.get(key)
 		if isinstance(value, str):
@@ -110,14 +111,14 @@ def _first_non_empty(record: dict, keys: tuple[str, ...]) -> str | None:
 	return None
 
 
-def _string_or_none(value: object) -> str | None:
+def _string_or_none(value: object) -> Optional[str]:
 	if isinstance(value, str):
 		cleaned = value.strip()
 		return cleaned or None
 	return None
 
 
-def _normalize_country_to_english(value: object) -> str | None:
+def _normalize_country_to_english(value: object) -> Optional[str]:
 	cleaned = _string_or_none(value)
 	if not cleaned:
 		return None
@@ -131,7 +132,7 @@ def _normalize_country_to_english(value: object) -> str | None:
 	return cleaned
 
 
-def _primary_institution_from_affiliation(affiliation_values: list[str]) -> str | None:
+def _primary_institution_from_affiliation(affiliation_values: list[str]) -> Optional[str]:
 	for value in affiliation_values:
 		cleaned = _clean_text(value)
 		if cleaned:
@@ -139,7 +140,7 @@ def _primary_institution_from_affiliation(affiliation_values: list[str]) -> str 
 	return None
 
 
-def _ieee_record_id(record: dict) -> str | None:
+def _ieee_record_id(record: dict) -> Optional[str]:
 	return _first_non_empty(record, ("article_number", "articleNumber", "document_id", "doi", "html_url"))
 
 

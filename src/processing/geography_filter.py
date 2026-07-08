@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+from typing import Optional
+
 import pycountry
 
 
@@ -26,14 +28,14 @@ MIDDLE_EAST_ALPHA2_CODES = {
 ALLOWED_CONTINENTS = {"APAC", "EMEA", "AMER"}
 
 
-def _clean_string(value: object) -> str | None:
+def _clean_string(value: object) -> Optional[str]:
 	if isinstance(value, str):
 		cleaned = value.strip()
 		return cleaned or None
 	return None
 
 
-def normalize_country_to_english(value: object) -> str | None:
+def normalize_country_to_english(value: object) -> Optional[str]:
 	cleaned = _clean_string(value)
 	if not cleaned:
 		return None
@@ -47,7 +49,7 @@ def normalize_country_to_english(value: object) -> str | None:
 	return cleaned
 
 
-def _continent_code_from_alpha2(alpha2: str | None) -> str | None:
+def _continent_code_from_alpha2(alpha2: Optional[str]) -> Optional[str]:
 	if not alpha2:
 		return None
 
@@ -78,7 +80,7 @@ def _continent_code_from_alpha2(alpha2: str | None) -> str | None:
 	return None
 
 
-def continent_from_country(country_or_region: object) -> str | None:
+def continent_from_country(country_or_region: object) -> Optional[str]:
 	if not isinstance(country_or_region, str):
 		return None
 

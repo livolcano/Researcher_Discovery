@@ -1,8 +1,11 @@
 from __future__ import annotations
 
+import copy
 import json
 import os
 from pathlib import Path
+import sys
+from typing import Optional
 
 import yaml
 from dotenv import load_dotenv
@@ -43,19 +46,62 @@ def _save_json(path: Path, payload: list[dict]) -> None:
 		json.dump(payload, handle, indent=2, ensure_ascii=False)
 
 
-def main() -> None:
-	project_root = Path(__file__).resolve().parents[1]
-	load_dotenv(project_root / ".env")
+def build_queries_from_keywords(keywords: list[str]) -> list[dict]:
+	queries: list[dict] = []
+	for index, keyword in enumerate(keywords, start=1):
+		cleaned = keyword.strip()
+		if not cleaned:
+			continue
+		queries.append(
+			{
+				"id": f"Q{index:02d}",
+				"text": cleaned,
+				"topic_cluster": cleaned,
+			}
+		)
+	return queries
+
+
+def _load_environment(project_root: Path) -> None:
+	candidate_paths = [project_root / ".env"]
+
+	if getattr(sys, "frozen", False):
+		candidate_paths.append(Path(sys.executable).resolve().parent / ".env")
+
+	candidate_paths.append(Path.cwd() / ".env")
+
+	seen_paths = set()
+	for path in candidate_paths:
+		resolved = path.resolve()
+		if resolved in seen_paths:
+			continue
+		seen_paths.add(resolved)
+		if path.exists():
+			load_dotenv(path, override=False)
+			break
+
+
+def run_pipeline(
+	*,
+	project_root: Optional[Path] = None,
+	queries_override: Optional[list[dict]] = None,
+	geo_filter_override: Optional[dict] = None,
+	output_path_override: Optional[Path] = None,
+) -> dict:
+	project_root = project_root or Path(__file__).resolve().parents[1]
+	_load_environment(project_root)
 
 	if truststore is not None:
 		truststore.inject_into_ssl()
 
 	logger = setup_logging(project_root / "data" / "researcher_discovery_output" / "logs")
 	keywords_config = _load_yaml(project_root / "config" / "keywords.yaml")
-	settings = _load_yaml(project_root / "config" / "settings.yaml")
+	settings = copy.deepcopy(_load_yaml(project_root / "config" / "settings.yaml"))
 
-	queries = keywords_config.get("queries", [])
+	queries = queries_override if queries_override is not None else keywords_config.get("queries", [])
 	source_settings = settings.get("sources", {})
+	if geo_filter_override is not None:
+		settings["geographic_filter"] = geo_filter_override
 
 	openalex_api_key = os.getenv("OPENALEX_API_KEY") or None
 	ieee_api_key = os.getenv("IEEE_API_KEY") or None
@@ -106,9 +152,10 @@ def main() -> None:
 		key=lambda candidate: (-candidate["relevance_score"], -candidate["related_paper_count"], candidate["researcher_name"])
 	)
 
-	output_path = project_root / settings.get("output", {}).get(
+	configured_output_path = project_root / settings.get("output", {}).get(
 		"excel_file", "data/researcher_discovery_output/researcher_discovery_mvp.xlsx"
 	)
+	output_path = output_path_override or configured_output_path
 	export_results(
 		output_path=output_path,
 		query_plan=queries,
@@ -123,11 +170,24 @@ def main() -> None:
 	_save_json(project_root / "data" / "interim" / "researcher_candidates.json", researcher_candidates)
 	_save_json(project_root / "data" / "interim" / "source_logs.json", data_source_logs)
 
-	print(f"Queries: {len(queries)}")
-	print(f"Paper records: {len(filtered_papers)}")
-	print(f"Author-paper relations: {len(filtered_author_relations)}")
-	print(f"Researcher candidates: {len(researcher_candidates)}")
-	print(f"Output file: {output_path}")
+	return {
+		"queries": queries,
+		"paper_results": filtered_papers,
+		"author_relations": filtered_author_relations,
+		"researcher_candidates": researcher_candidates,
+		"source_logs": data_source_logs,
+		"output_path": output_path,
+	}
+
+
+def main() -> None:
+	results = run_pipeline()
+
+	print(f"Queries: {len(results['queries'])}")
+	print(f"Paper records: {len(results['paper_results'])}")
+	print(f"Author-paper relations: {len(results['author_relations'])}")
+	print(f"Researcher candidates: {len(results['researcher_candidates'])}")
+	print(f"Output file: {results['output_path']}")
 
 
 if __name__ == "__main__":

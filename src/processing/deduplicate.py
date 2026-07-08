@@ -1,16 +1,17 @@
 from __future__ import annotations
 
 from collections import Counter
+from typing import Optional
 
 
-def _clean_text(value: str | None) -> str | None:
+def _clean_text(value: Optional[str]) -> Optional[str]:
 	if value is None:
 		return None
 	cleaned = " ".join(value.strip().split())
 	return cleaned or None
 
 
-def create_researcher_key(author_relation: dict) -> tuple[str, str | None]:
+def create_researcher_key(author_relation: dict) -> tuple[str, Optional[str]]:
 	orcid = _clean_text(author_relation.get("orcid"))
 	if orcid:
 		return f"orcid:{orcid.lower()}", None
