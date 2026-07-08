@@ -9,8 +9,11 @@ __pycache__/
 build/
 dist/
 *.pyc
+Keywords Examples/
 
 data/raw/
+data/interim/
 data/interim/*.json
+data/researcher_discovery_output/
 data/researcher_discovery_output/*.xlsx
 data/researcher_discovery_output/logs/

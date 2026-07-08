@@ -8,7 +8,6 @@ pycountry_datas, pycountry_binaries, pycountry_hiddenimports = collect_all("pyco
 datas = [
 	("ui_app.py", "."),
 	("config", "config"),
-	("Keywords", "Keywords"),
 	("data", "data"),
 	("README.md", "."),
 	(".env.example", "."),

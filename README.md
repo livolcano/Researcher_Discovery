@@ -125,6 +125,62 @@ Build outputs:
 
 Windows builds must be created on Windows. macOS app bundles must be created on macOS.
 
+## Guided Setup with GitHub Copilot
+
+If you are not a software engineer but you do have GitHub Copilot in VS Code, you can use Copilot as a step-by-step assistant to get this project running locally.
+
+Recommended workflow:
+
+1. Open VS Code.
+2. Open the GitHub Copilot chat panel.
+3. Open an empty folder or the folder where you want to clone this repository.
+4. Copy the prompt below into Copilot chat.
+5. Let Copilot guide you one step at a time instead of trying to do everything manually.
+
+Suggested prompt for Copilot:
+
+```text
+I am not a software engineer. Please help me run this project locally from start to finish.
+
+Work step by step and wait for me at each major checkpoint.
+
+My goals are:
+1. Check whether my local machine is ready.
+2. Check Python version and any missing tools.
+3. Clone this GitHub repository into my local machine.
+4. Open the cloned project in VS Code.
+5. Create and activate a virtual environment.
+6. Install dependencies from requirements.txt.
+7. Create a local .env file from .env.example.
+8. Explain which API keys are required, which are optional, and where to paste them.
+9. Help me decide whether to disable IEEE if I do not have an IEEE API key yet.
+10. Run the project locally.
+11. If available, help me start the desktop or UI version.
+12. Verify that the app or output Excel file is generated correctly.
+13. If anything fails, diagnose the problem and give me the smallest possible fix.
+
+Important rules:
+- Do not rewrite the project.
+- Do not refactor code unless absolutely necessary.
+- Prefer minimal fixes.
+- Tell me exactly which terminal command to run when needed.
+- Explain each step in simple language.
+- Assume I am unfamiliar with Python environments.
+```
+
+What Copilot should help you confirm during setup:
+
+- Git is installed and can clone the repository.
+- A compatible Python version is available.
+- The virtual environment is created successfully.
+- All dependencies are installed.
+- `.env` exists and contains the required variables.
+- OpenAlex works with or without a key.
+- IEEE is disabled if no IEEE API key is available.
+- The project launches successfully on your local machine.
+
+For non-technical users, the most practical target is usually the desktop app or local UI rather than running the raw pipeline manually.
+
 ## Local Configuration
 
 Local secrets should be stored in a `.env` file created from [.env.example](.env.example).
