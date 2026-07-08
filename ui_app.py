@@ -1,7 +1,5 @@
 from __future__ import annotations
 
-import subprocess
-import sys
 from datetime import datetime
 from pathlib import Path
 
@@ -24,8 +22,6 @@ RESULT_COLUMNS = [
 
 
 def _default_output_directory() -> Path:
-	if getattr(sys, "frozen", False):
-		return Path.home() / "Documents" / "Researcher Discovery Output"
 	return PROJECT_ROOT / "data" / "researcher_discovery_output"
 
 
@@ -57,20 +53,6 @@ def _resolve_output_path(directory_value: str, filename_value: str) -> Path:
 	return base_directory / filename_text
 
 
-def _choose_output_directory(initial_directory: str) -> str:
-	if getattr(sys, "frozen", False):
-		command = [sys.executable, "--pick-folder", initial_directory]
-	else:
-		command = [sys.executable, str(PROJECT_ROOT / "desktop_launcher.py"), "--pick-folder", initial_directory]
-
-	result = subprocess.run(command, capture_output=True, text=True)
-	if result.returncode != 0:
-		return initial_directory
-
-	selected_directory = result.stdout.strip()
-	return selected_directory or initial_directory
-
-
 def _results_table(candidates: list[dict]) -> pd.DataFrame:
 	frame = pd.DataFrame(candidates)
 	if frame.empty:
@@ -90,15 +72,11 @@ if "output_filename" not in st.session_state:
 st.title("Researcher Discovery")
 st.caption("Enter keywords and optional geography filters to generate researcher candidates.")
 
-folder_display_col, folder_action_col = st.columns([4, 1])
-folder_display_col.text_input(
+st.session_state["output_directory"] = st.text_input(
 	"Excel output folder",
 	value=st.session_state["output_directory"],
-	disabled=True,
+	placeholder="For example: data/researcher_discovery_output",
 )
-if folder_action_col.button("Choose Folder", use_container_width=True):
-	st.session_state["output_directory"] = _choose_output_directory(st.session_state["output_directory"])
-	st.rerun()
 
 with st.form("search_form"):
 	keywords_value = st.text_area(

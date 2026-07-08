@@ -87,44 +87,6 @@ Recommended steps:
 
 If you do not have an IEEE key yet, you can disable IEEE in [config/settings.yaml](config/settings.yaml) and run the project with OpenAlex and arXiv only.
 
-## Running the Desktop App
-
-This project can be distributed as a desktop app so non-software-engineering users do not need to run commands manually.
-
-### For End Users
-
-If you already received a packaged build from someone else:
-
-- On Windows, launch the provided `.exe` application.
-- On macOS, open the provided `.app` bundle.
-
-The desktop app opens the UI directly and allows users to:
-
-- enter keywords
-- optionally filter by continent and country
-- choose a local output folder
-- set the Excel file name
-- run the search and download or save the results
-
-If macOS blocks the app on first launch, use right-click and select `Open`, or allow it in System Settings.
-
-### For Internal Packaging
-
-Desktop packaging files are included in this repository:
-
-- [desktop_launcher.py](desktop_launcher.py): desktop entry point
-- [ResearcherDiscovery.spec](ResearcherDiscovery.spec): PyInstaller spec for macOS packaging
-- [build_mac_app.sh](build_mac_app.sh): macOS build script
-- [build_windows_exe.ps1](build_windows_exe.ps1): Windows build script
-- [requirements-desktop.txt](requirements-desktop.txt): packaging-only dependencies
-
-Build outputs:
-
-- macOS: `dist/ResearcherDiscovery.app`
-- Windows: `dist/ResearcherDiscovery/` with the executable build contents
-
-Windows builds must be created on Windows. macOS app bundles must be created on macOS.
-
 ## Guided Setup with GitHub Copilot
 
 If you are not a software engineer but you do have GitHub Copilot in VS Code, you can use Copilot as a step-by-step assistant to get this project running locally.
@@ -155,8 +117,8 @@ My goals are:
 8. Explain which API keys are required, which are optional, and where to paste them.
 9. Help me decide whether to disable IEEE if I do not have an IEEE API key yet.
 10. Run the project locally.
-11. If available, help me start the desktop or UI version.
-12. Verify that the app or output Excel file is generated correctly.
+11. Help me start the Streamlit UI version.
+12. Verify that the output Excel file is generated correctly.
 13. If anything fails, diagnose the problem and give me the smallest possible fix.
 
 Important rules:
@@ -177,9 +139,7 @@ What Copilot should help you confirm during setup:
 - `.env` exists and contains the required variables.
 - OpenAlex works with or without a key.
 - IEEE is disabled if no IEEE API key is available.
-- The project launches successfully on your local machine.
-
-For non-technical users, the most practical target is usually the desktop app or local UI rather than running the raw pipeline manually.
+- The Streamlit UI launches successfully on your local machine.
 
 ## Local Configuration
 
