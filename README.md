@@ -44,6 +44,21 @@ The generated shortlist should be treated as an evidence-backed research candida
 - [src/processing](src/processing): normalization, deduplication, filtering, and scoring logic
 - [src/export/excel_exporter.py](src/export/excel_exporter.py): Excel export
 
+## Runtime Requirement
+
+- Python 3.14 (recommended: 3.14.6)
+
+Recommended local setup commands:
+
+```bash
+python3.14 --version
+python3.14 -m venv .venv-mac
+source .venv-mac/bin/activate
+pip install -r requirements.txt
+```
+
+If `python3` points to an older system Python on macOS, use `python3.14` explicitly.
+
 ## API Keys
 
 The project currently supports three data sources. Not all of them require an API key.
