@@ -59,6 +59,96 @@ pip install -r requirements.txt
 
 If `python3` points to an older system Python on macOS, use `python3.14` explicitly.
 
+## Quick Start Paths (for non-developers)
+
+You can use this project in two ways:
+
+1. **As a normal app** (run Streamlit UI or Python script)
+2. **As a Copilot skill** (invoke `/researcher-discovery` in Copilot Chat)
+
+### Path A: Use as a normal app
+
+After local setup and `.env` configuration:
+
+```bash
+# Option 1: Streamlit UI
+python3 ui_app.py
+
+# Option 2: Pipeline CLI
+python3 src/main.py
+```
+
+If you prefer Copilot to guide you step-by-step in plain language, paste this prompt:
+
+```text
+I am not a software engineer. Help me run this project as a normal application.
+
+Please guide me one step at a time and wait for my confirmation after each major step.
+Use simple language and give me exact terminal commands.
+
+My goal:
+1) Set up Python and dependencies
+2) Configure .env
+3) Start the Streamlit UI
+4) Run one search and confirm the Excel output path
+5) If an error happens, diagnose and give the smallest fix
+```
+
+Chinese version:
+
+```text
+我不是软件开发人员，请一步一步带我把这个项目当作普通应用跑起来。
+
+请每个关键步骤都先解释清楚，再给我准确可复制的命令；每完成一步就等我确认。
+我的目标是：安装依赖、配置 .env、启动 UI、跑一次检索并确认 Excel 输出路径。
+如果报错，请优先给最小修复方案。
+```
+
+### Path B: Use as a Copilot skill
+
+This repository includes a workspace skill:
+
+- `.github/skills/researcher-discovery/SKILL.md`
+
+In VS Code Copilot Chat:
+
+1. Open this repository root as the active workspace.
+2. Start a new chat session (or reload window).
+3. Invoke `/researcher-discovery`.
+4. Provide keywords and optional filters.
+
+If you want a copy-paste prompt for skill mode, use:
+
+```text
+/researcher-discovery
+Please run researcher discovery with these settings:
+- keywords: energy research
+- country_or_region: (leave empty)
+- continent: (leave empty)
+- top_n: 20
+
+Return:
+1) a short summary (query count, paper count, candidate count)
+2) a top candidate table with relevance scores
+3) the generated Excel output path
+```
+
+Chinese version:
+
+```text
+/researcher-discovery
+请帮我运行一次研究者发现流程，参数如下：
+- keywords: energy research
+- country_or_region: 留空
+- continent: 留空
+- top_n: 20
+
+请返回：
+1）简要统计（query/paper/candidate）
+2）候选研究者表格（含分数和等级）
+3）Excel 输出文件路径
+```
+
 ## API Keys
 
 The project currently supports three data sources. Not all of them require an API key.
@@ -155,6 +245,25 @@ What Copilot should help you confirm during setup:
 - OpenAlex works with or without a key.
 - IEEE is disabled if no IEEE API key is available.
 - The Streamlit UI launches successfully on your local machine.
+
+## Copilot Skill: researcher-discovery (script-level usage)
+
+The skill helper script is:
+
+- `.github/skills/researcher-discovery/scripts/run_research_pipeline.py`
+
+```bash
+# interactive terminal mode
+python .github/skills/researcher-discovery/scripts/run_research_pipeline.py --interactive
+
+# explicit arguments
+python .github/skills/researcher-discovery/scripts/run_research_pipeline.py \
+  --keywords "Open RAN" "6G ISAC" \
+  --country Japan \
+  --continent APAC \
+  --top-n 15 \
+  --format both
+```
 
 ## Local Configuration
 
